@@ -1,7 +1,6 @@
 package com.traveltime.regionsLocationsTask
 
 import io.circe.Decoder
-import io.circe.generic.auto._
 
 object Codecs {
   implicit val decodeCoordinate: Decoder[Coordinate] =

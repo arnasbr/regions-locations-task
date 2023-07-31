@@ -1,6 +1,5 @@
 package com.traveltime.regionsLocationsTask
 
-import cats.implicits._
 import com.monovore.decline.{CommandApp, Opts}
 import io.circe.Decoder
 import io.circe.generic.auto._
@@ -12,7 +11,6 @@ import scala.util.Using
 import scala.io.Source
 import java.nio.charset.StandardCharsets
 import com.traveltime.regionsLocationsTask.Codecs._
-import com.traveltime.regionsLocationsTask.Cli._
 
 object Main
     extends CommandApp(
