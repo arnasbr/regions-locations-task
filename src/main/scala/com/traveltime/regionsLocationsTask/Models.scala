@@ -11,4 +11,10 @@ object Models {
       region: String,
       matched_locations: List[String]
   )
+
+  case class CliArgs(
+      locationsFile: String,
+      regionsFile: String,
+      outputFile: String
+  )
 }

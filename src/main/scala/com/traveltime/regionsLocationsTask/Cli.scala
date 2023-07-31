@@ -2,6 +2,7 @@ package com.traveltime.regionsLocationsTask
 
 import cats.implicits.catsSyntaxTuple3Semigroupal
 import com.monovore.decline._
+import com.traveltime.regionsLocationsTask.Models.CliArgs
 
 object Cli {
   val locationsInputFile: Opts[String] =
@@ -11,9 +12,9 @@ object Cli {
   val outputFile: Opts[String] =
     Opts.option[String]("output", help = "Path to output JSON file")
 
-  val command: Opts[(String, String, String)] = Opts.subcommand(
+  val command: Opts[CliArgs] = Opts.subcommand(
     Command(name = "match", header = "Matches locations to regions")(
-      (locationsInputFile, regionsInputFile, outputFile).tupled
+      (locationsInputFile, regionsInputFile, outputFile).mapN(CliArgs)
     )
   )
 }

@@ -1,5 +1,6 @@
 package com.traveltime.regionsLocationsTask
 
+import com.traveltime.regionsLocationsTask.Models._
 import io.circe.Decoder
 
 object Codecs {

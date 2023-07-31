@@ -18,7 +18,11 @@ object Main
       name = "regions-locations",
       header = "Matches locations to regions",
       main = {
-        Cli.command.map { case (locationsFile, regionsFile, outputFile) =>
+        Cli.command.map { args =>
+          val locationsFile = args.locationsFile
+          val regionsFile = args.regionsFile
+          val outputFile = args.outputFile
+
           def parseAndDecode[T: Decoder](
               jsonFilePath: String
           ): Either[Throwable, List[T]] = {
