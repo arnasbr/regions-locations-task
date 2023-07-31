@@ -58,22 +58,26 @@ class GeneralSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
       Region(
         "Region 1",
         List(
-          List(
-            Coordinate(0, 0),
-            Coordinate(0, 2),
-            Coordinate(2, 2),
-            Coordinate(2, 0)
+          Polygon(
+            List(
+              Coordinate(0, 0),
+              Coordinate(0, 2),
+              Coordinate(2, 2),
+              Coordinate(2, 0)
+            )
           )
         )
       ),
       Region(
         "Region 2",
         List(
-          List(
-            Coordinate(2, 2),
-            Coordinate(2, 4),
-            Coordinate(4, 4),
-            Coordinate(4, 2)
+          Polygon(
+            List(
+              Coordinate(2, 2),
+              Coordinate(2, 4),
+              Coordinate(4, 4),
+              Coordinate(4, 2)
+            )
           )
         )
       )
@@ -98,11 +102,13 @@ class GeneralSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
       Region(
         "Region 1",
         List(
-          List(
-            Coordinate(6, 6),
-            Coordinate(6, 8),
-            Coordinate(8, 8),
-            Coordinate(8, 6)
+          Polygon(
+            List(
+              Coordinate(6, 6),
+              Coordinate(6, 8),
+              Coordinate(8, 8),
+              Coordinate(8, 6)
+            )
           )
         )
       )
@@ -126,11 +132,13 @@ class GeneralSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
       Region(
         "Region 1",
         List(
-          List(
-            Coordinate(0, 0),
-            Coordinate(0, 4),
-            Coordinate(4, 4),
-            Coordinate(4, 0)
+          Polygon(
+            List(
+              Coordinate(0, 0),
+              Coordinate(0, 4),
+              Coordinate(4, 4),
+              Coordinate(4, 0)
+            )
           )
         )
       )

@@ -8,7 +8,7 @@ import com.traveltime.regionsLocationsTask.GeographyUtils._
 import com.traveltime.regionsLocationsTask.RegionsLocationsUtils._
 import com.traveltime.regionsLocationsTask.Codecs._
 import io.circe.parser._
-import io.circe.Decoder
+import io.circe.{Decoder, DecodingFailure}
 
 class CodecsSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
   "decodeCoordinate" should "decode a JSON array to Coordinate" in {
@@ -46,5 +46,70 @@ class CodecsSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
     val result = Decoder[Location].decodeJson(json)
 
     result shouldBe a[Left[_, _]]
+  }
+
+  "decodePolygon" should "successfully decode valid json" in {
+    val json = """[[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]"""
+    val expected =
+      Right(Polygon(List(Coordinate(1, 2), Coordinate(3, 4), Coordinate(5, 6))))
+
+    decode[Polygon](json) shouldEqual expected
+  }
+
+  it should "fail to decode json when coordinates are not in pairs" in {
+    val json = """[[1.0, 2.0], [3.0, 4.0, 5.0], [5.0, 6.0]]"""
+    val expected =
+      Left(DecodingFailure("Coordinates must be a list of two numbers", List()))
+
+    decode[Polygon](json) shouldEqual expected
+  }
+
+  it should "fail to decode json when it's not a list" in {
+    val json = """{"coordinates": [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]}"""
+
+    decode[Polygon](json).isLeft shouldBe true
+  }
+
+  "decodeRegion" should "decode a JSON object to Region" in {
+    val json = parse(
+      """
+        |{
+        |  "name": "region1",
+        |  "coordinates": [
+        |    [
+        |      [
+        |        25.13573603154873,
+        |        54.67922829209249
+        |      ],
+        |      [
+        |        25.156131289233258,
+        |        54.58478594629585
+        |      ],
+        |      [
+        |        25.286660938416787,
+        |        54.5942400514071
+        |      ]
+        |    ]
+        |  ]
+        |}
+      """.stripMargin
+    ).getOrElse(fail("Parsing failed"))
+
+    val result = Decoder[Region].decodeJson(json)
+
+    result shouldBe Right(
+      Region(
+        "region1",
+        List(
+          Polygon(
+            List(
+              Coordinate(25.13573603154873, 54.67922829209249),
+              Coordinate(25.156131289233258, 54.58478594629585),
+              Coordinate(25.286660938416787, 54.5942400514071)
+            )
+          )
+        )
+      )
+    )
   }
 }
