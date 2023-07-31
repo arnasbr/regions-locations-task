@@ -7,6 +7,7 @@ import io.circe.syntax.EncoderOps
 import scala.util.Using
 import scala.io.Source
 import Models._
+import Codecs._
 
 object JsonUtils {
   def parseAndDecode[T: Decoder](

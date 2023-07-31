@@ -1,4 +1,7 @@
 package com.traveltime.regionsLocationsTask
+import io.circe.generic.extras.JsonKey
+import io.circe.generic.extras.semiauto._
+import io.circe.generic.extras.Configuration
 
 object Models {
   case class Coordinate(x: Double, y: Double)
@@ -9,7 +12,7 @@ object Models {
 
   case class RegionWithLocations(
       region: String,
-      matched_locations: List[String]
+      @JsonKey("matched_locations") MatchedLocations: List[String]
   )
 
   case class CliArgs(
