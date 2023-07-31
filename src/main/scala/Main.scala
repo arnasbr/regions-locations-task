@@ -1,14 +1,27 @@
-import io.circe.generic.auto._, io.circe.parser._
+import io.circe.Decoder
+import io.circe.generic.auto._
+import io.circe.parser._
 
-import scala.util.{Try, Using}
+import scala.util.Using
 import scala.io.Source
 
-case class Region(name: String, coordinates: List[List[List[Double]]])
-case class Location(name: String, coordinates: List[Double])
+case class Coordinate(x: Double, y: Double)
+case class Region(name: String, coordinates: List[List[Coordinate]])
+case class Location(name: String, coordinates: Coordinate)
 
 object Main extends App {
 
-  def parseAndDecode[T: io.circe.Decoder](
+  // Custom decoders
+  implicit val decodeCoordinate: Decoder[Coordinate] =
+    Decoder[List[Double]].emap {
+      case List(x, y) => Right(Coordinate(x, y))
+      case _          => Left("Coordinate must be a list of two numbers")
+    }
+
+  implicit val decodeLocation: Decoder[Location] =
+    Decoder.forProduct2("name", "coordinates")(Location.apply)
+
+  def parseAndDecode[T: Decoder](
       jsonFilePath: String
   ): Either[Throwable, List[T]] = {
     val tryJsonString = Using(Source.fromFile(jsonFilePath))(_.mkString)
@@ -19,27 +32,8 @@ object Main extends App {
   }
 
   // Parse and decode JSON for locations
-  val locationsResult =
-    parseAndDecode[Location]("Input/locations.json")
-
-  locationsResult match {
-    case Left(failure) =>
-      println(s"Failed to parse/decode Locations: ${failure.getMessage}")
-    case Right(locations) =>
-      locations.foreach(location =>
-        println(s"Successfully decoded location: $location")
-      )
-  }
+  val locationsResult = parseAndDecode[Location]("Input/locations.json")
 
   // Parse and decode JSON for regions
   val regionsResult = parseAndDecode[Region]("Input/regions.json")
-
-  regionsResult match {
-    case Left(failure) =>
-      println(s"Failed to parse/decode Regions: ${failure.getMessage}")
-    case Right(regions) =>
-      regions.foreach(region =>
-        println(s"Successfully decoded region: $region")
-      )
-  }
 }
