@@ -11,6 +11,7 @@ import scala.util.Using
 import scala.io.Source
 import java.nio.charset.StandardCharsets
 import com.traveltime.regionsLocationsTask.Codecs._
+import Models._
 
 object Main
     extends CommandApp(
