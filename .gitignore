@@ -20,5 +20,3 @@ build/
 .bsp
 
 logs/
-
-.scalafmt.conf
