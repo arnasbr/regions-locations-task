@@ -6,7 +6,9 @@ import io.circe.generic.extras.Configuration
 object Models {
   case class Coordinate(x: Double, y: Double)
 
-  case class Region(name: String, coordinates: List[List[Coordinate]])
+  case class Polygon(coordinates: List[Coordinate])
+
+  case class Region(name: String, polygons: List[Polygon])
 
   case class Location(name: String, coordinates: Coordinate)
 

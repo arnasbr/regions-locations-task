@@ -8,8 +8,11 @@ object RegionsLocationsUtils {
   ): List[RegionWithLocations] = {
     regions.map { region =>
       val matchedLocations = locations.filter(location =>
-        region.coordinates.exists(polygon =>
-          GeographyUtils.pointInPolygon(location.coordinates, polygon)
+        region.polygons.exists(polygon =>
+          GeographyUtils.pointInPolygon(
+            location.coordinates,
+            polygon.coordinates
+          )
         )
       )
       RegionWithLocations(region.name, matchedLocations.map(_.name))
