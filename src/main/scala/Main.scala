@@ -1,9 +1,14 @@
 import io.circe.Decoder
 import io.circe.generic.auto._
 import io.circe.parser._
+import io.circe.syntax.EncoderOps
 
+import java.nio.charset.StandardCharsets
+import java.nio.file.{Files, Paths}
 import scala.util.Using
 import scala.io.Source
+
+import io.circe.Printer
 
 case class Coordinate(x: Double, y: Double)
 case class Region(name: String, coordinates: List[List[Coordinate]])
@@ -12,7 +17,6 @@ case class Location(name: String, coordinates: Coordinate)
 case class RegionWithLocations(region: String, matched_locations: List[String])
 
 object Main extends App {
-
   // Custom decoders
   implicit val decodeCoordinate: Decoder[Coordinate] =
     Decoder[List[Double]].emap {
@@ -83,5 +87,16 @@ object Main extends App {
           s"Region: ${result.region}, Matched Locations: ${result.matched_locations}"
         )
       )
+  }
+
+  regionWithLocations match {
+    case Right(regions) =>
+      val jsonString = regions.asJson.spaces2 // Convert the results to JSON
+      Files.write(
+        Paths.get("Output/results.json"),
+        jsonString.getBytes(StandardCharsets.UTF_8)
+      ) // Write to a file
+    case Left(error) =>
+      println(s"An error occurred: ${error.getMessage}")
   }
 }
