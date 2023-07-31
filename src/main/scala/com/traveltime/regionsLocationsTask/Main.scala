@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets
 import com.traveltime.regionsLocationsTask.Codecs._
 import Models._
 
+import scala.annotation.tailrec
+
 object Main
     extends CommandApp(
       name = "regions-locations",
@@ -37,25 +39,32 @@ object Main
               point: Coordinate,
               polygon: List[Coordinate]
           ): Boolean = {
-            val x = point.x
-            val y = point.y
-            var isInside = false
-            var j = polygon.size - 1
+            val windingNumber: Int = polygon
+              .sliding(2)
+              .collect {
+                case a :: b :: Nil
+                    if a.y <= point.y && b.y > point.y && isLeft(
+                      a,
+                      b,
+                      point
+                    ) > 0 =>
+                  1
+                case a :: b :: Nil
+                    if a.y > point.y && b.y <= point.y && isLeft(
+                      a,
+                      b,
+                      point
+                    ) < 0 =>
+                  -1
+                case _ => 0
+              }
+              .sum
 
-            for (i <- polygon.indices) {
-              val xi = polygon(i).x
-              val yi = polygon(i).y
-              val xj = polygon(j).x
-              val yj = polygon(j).y
+            windingNumber != 0
+          }
 
-              val intersect = ((yi > y) != (yj > y)) &&
-                (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
-
-              if (intersect) isInside = !isInside
-              j = i
-            }
-
-            isInside
+          def isLeft(a: Coordinate, b: Coordinate, c: Coordinate): Double = {
+            (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)
           }
 
           // Parse and decode JSON for locations
