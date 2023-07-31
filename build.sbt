@@ -1,6 +1,7 @@
 // The simplest possible sbt build file is just one line:
 
 scalaVersion := "2.13.8"
+val catsVersion = "2.9.0"
 // That is, to create a valid sbt build, all you've got to do is define the
 // version of Scala you'd like your project to use.
 
@@ -34,6 +35,13 @@ libraryDependencies ++= Seq(
 ).map(_ % circeVersion)
 
 libraryDependencies += "com.monovore" %% "decline" % "2.4.1"
+
+libraryDependencies ++= Seq(
+  "org.scalatestplus" %% "scalacheck-1-17" % "3.2.16.0" % "test",
+  "org.scalatest" %% "scalatest" % "3.2.16" % "test",
+  "org.scalactic" %% "scalactic" % "3.2.16",
+  "org.typelevel" %% "cats-core" % catsVersion
+)
 
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the scala-parser-combinators dependency to the set of dependencies
