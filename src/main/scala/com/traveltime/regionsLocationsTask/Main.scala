@@ -1,32 +1,17 @@
+package com.traveltime.regionsLocationsTask
+
 import io.circe.Decoder
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 
-import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 import scala.util.Using
 import scala.io.Source
-
-import io.circe.Printer
-
-case class Coordinate(x: Double, y: Double)
-case class Region(name: String, coordinates: List[List[Coordinate]])
-case class Location(name: String, coordinates: Coordinate)
-
-case class RegionWithLocations(region: String, matched_locations: List[String])
+import java.nio.charset.StandardCharsets
+import com.traveltime.regionsLocationsTask.Codecs._
 
 object Main extends App {
-  // Custom decoders
-  implicit val decodeCoordinate: Decoder[Coordinate] =
-    Decoder[List[Double]].emap {
-      case List(x, y) => Right(Coordinate(x, y))
-      case _          => Left("Coordinate must be a list of two numbers")
-    }
-
-  implicit val decodeLocation: Decoder[Location] =
-    Decoder.forProduct2("name", "coordinates")(Location.apply)
-
   def parseAndDecode[T: Decoder](
       jsonFilePath: String
   ): Either[Throwable, List[T]] = {
