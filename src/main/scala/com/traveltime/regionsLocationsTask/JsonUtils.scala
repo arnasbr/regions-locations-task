@@ -23,12 +23,4 @@ object JsonUtils {
         .left
         .map(e => DecodeError(e.toString()))
     } yield decodedList
-
-  def regionsToJsonString(
-      regionWithLocations: Either[CustomError, List[RegionWithLocations]]
-  ): Either[CustomError, String] = {
-    regionWithLocations.left
-      .map(e => ConversionError(e.toString))
-      .map(_.asJson.spaces2)
-  }
 }
