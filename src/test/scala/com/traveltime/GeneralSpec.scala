@@ -153,4 +153,128 @@ class GeneralSpec extends AnyFlatSpec with ScalaCheckDrivenPropertyChecks {
 
     matchLocationsWithRegions(regions, locations) shouldEqual expectedMatches
   }
+
+  "pointInPolygon" should "return true if the point is exactly on a vertex of the polygon" in {
+    val polygon = List(
+      Coordinate(0, 0),
+      Coordinate(0, 10),
+      Coordinate(10, 10),
+      Coordinate(10, 0),
+      Coordinate(0, 0)
+    )
+
+    val point = Coordinate(0, 0)
+
+    pointInPolygon(point, polygon) shouldEqual true
+  }
+
+  "matchLocationsWithRegions" should "match a location to multiple regions when they overlap" in {
+    val locations = List(
+      Location("Location 1", Coordinate(2.5, 2.5))
+    )
+
+    val regions = List(
+      Region(
+        "Region 1",
+        List(
+          Polygon(
+            List(
+              Coordinate(0, 0),
+              Coordinate(0, 5),
+              Coordinate(5, 5),
+              Coordinate(5, 0)
+            )
+          )
+        )
+      ),
+      Region(
+        "Region 2",
+        List(
+          Polygon(
+            List(
+              Coordinate(2, 2),
+              Coordinate(2, 4),
+              Coordinate(4, 4),
+              Coordinate(4, 2)
+            )
+          )
+        )
+      )
+    )
+
+    val expectedMatches = List(
+      RegionWithLocations("Region 1", List("Location 1")),
+      RegionWithLocations("Region 2", List("Location 1"))
+    )
+
+    matchLocationsWithRegions(regions, locations) shouldEqual expectedMatches
+  }
+
+  "pointInPolygon" should "return true if the point is exactly on an edge of the polygon, but not on a vertex" in {
+    val polygon = List(
+      Coordinate(0, 0),
+      Coordinate(0, 10),
+      Coordinate(10, 10),
+      Coordinate(10, 0),
+      Coordinate(0, 0)
+    )
+
+    val point = Coordinate(5, 0)
+
+    pointInPolygon(point, polygon) shouldEqual true
+  }
+
+  "matchLocationsWithRegions" should "match multiple locations in the same point to the appropriate region" in {
+    val locations = List(
+      Location("Location 1", Coordinate(2.5, 2.5)),
+      Location("Location 2", Coordinate(2.5, 2.5))
+    )
+
+    val regions = List(
+      Region(
+        "Region 1",
+        List(
+          Polygon(
+            List(
+              Coordinate(0, 0),
+              Coordinate(0, 5),
+              Coordinate(5, 5),
+              Coordinate(5, 0)
+            )
+          )
+        )
+      )
+    )
+
+    val expectedMatches = List(
+      RegionWithLocations("Region 1", List("Location 1", "Location 2"))
+    )
+
+    matchLocationsWithRegions(regions, locations) shouldEqual expectedMatches
+  }
+
+  "matchLocationsWithRegions" should "not match any locations to a region defined by a single-point polygon" in {
+    val locations = List(
+      Location("Location 1", Coordinate(1, 1))
+    )
+
+    val regions = List(
+      Region(
+        "Region 1",
+        List(
+          Polygon(
+            List(
+              Coordinate(1, 1)
+            )
+          )
+        )
+      )
+    )
+
+    val expectedMatches = List(
+      RegionWithLocations("Region 1", List())
+    )
+
+    matchLocationsWithRegions(regions, locations) shouldEqual expectedMatches
+  }
 }
