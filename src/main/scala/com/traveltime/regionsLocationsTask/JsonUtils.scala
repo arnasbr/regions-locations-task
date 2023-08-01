@@ -8,12 +8,12 @@ import scala.util.Using
 import scala.io.Source
 import Models._
 import Codecs._
-import CustomErrors._
+import CustomError._
 
 object JsonUtils {
   def parseAndDecode[T: Decoder](
       jsonFilePath: String
-  ): Either[CustomErrors, List[T]] =
+  ): Either[CustomError, List[T]] =
     for {
       data <- Using(Source.fromFile(jsonFilePath))(_.mkString).toEither.left
         .map(e => FileReadError(e.toString))
@@ -25,8 +25,8 @@ object JsonUtils {
     } yield decodedList
 
   def regionsToJsonString(
-      regionWithLocations: Either[CustomErrors, List[RegionWithLocations]]
-  ): Either[CustomErrors, String] = {
+      regionWithLocations: Either[CustomError, List[RegionWithLocations]]
+  ): Either[CustomError, String] = {
     regionWithLocations.left
       .map(e => ConversionError(e.toString))
       .map(_.asJson.spaces2)
