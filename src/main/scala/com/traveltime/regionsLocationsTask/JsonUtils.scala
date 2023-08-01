@@ -13,10 +13,11 @@ object JsonUtils {
   def parseAndDecode[T: Decoder](
       jsonFilePath: String
   ): Either[Throwable, List[T]] = {
-    val tryJsonString = Using(Source.fromFile(jsonFilePath))(_.mkString)
-    tryJsonString.toEither.flatMap { jsonString =>
-      parse(jsonString).flatMap(_.as[List[T]])
-    }
+    for {
+      jsonString <- Using(Source.fromFile(jsonFilePath))(_.mkString).toEither
+      json <- parse(jsonString)
+      list <- json.as[List[T]]
+    } yield list
   }
 
   def regionsToJsonString(
