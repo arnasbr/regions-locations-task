@@ -2,12 +2,14 @@ package com.traveltime.regionsLocationsTask
 
 import com.monovore.decline.{CommandApp, Opts}
 import io.circe.generic.auto._
+
 import java.nio.file.{Files, Paths}
 import java.nio.charset.StandardCharsets
 import com.traveltime.regionsLocationsTask.Codecs._
 import Models._
 import JsonUtils._
 import RegionsLocationsUtils._
+import io.circe.syntax.EncoderOps
 
 object Main
     extends CommandApp(
@@ -19,33 +21,24 @@ object Main
           val regionsFile = args.regionsFile
           val outputFile = args.outputFile
 
-          // Parse and decode JSON for locations
-          val locationsResult = parseAndDecode[Location](locationsFile)
-
-          // Parse and decode JSON for regions
-          val regionsResult = parseAndDecode[Region](regionsFile)
-
-          val regionWithLocations = for {
-            regions <- regionsResult
-            locations <- locationsResult
-          } yield {
-            val matched = matchLocationsWithRegions(regions, locations)
-            matched
+          (
+            for {
+              locations <- parseAndDecode[Location](locationsFile)
+              regions <- parseAndDecode[Region](regionsFile)
+            } yield matchLocationsWithRegions(regions, locations)
               .map(r => r.copy(matchedLocations = r.matchedLocations.sorted))
               .sortBy(_.region)
-          }
-
-          val jsonStringEither = regionsToJsonString(regionWithLocations)
-
-          jsonStringEither match {
-            case Right(jsonString) =>
-              // This is a side effect
-              Files.write(
-                Paths.get(outputFile),
-                jsonString.getBytes(StandardCharsets.UTF_8)
-              )
+          ) match {
             case Left(error) =>
               println(s"An error occurred: ${error.toString}")
+
+            case Right(regionsWithLocations) =>
+              Files.write(
+                Paths.get(outputFile),
+                regionsWithLocations.asJson.spaces2.getBytes(
+                  StandardCharsets.UTF_8
+                )
+              )
           }
         }
       }
