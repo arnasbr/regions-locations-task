@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Execute sbt command
-sbt "run match --locations Input/test1/locations.json --regions Input/test1/regions.json --output Output/results.json"
+sbt "run match --locations src/main/resources/input/locations.json
+--regions src/main/resources/input/regions.json --output src/main/resources/output/results.json"
 
 # Compare the output to the expected output
 diff src/main/resources/output/results.json src/main/resources/expectedResults.json
