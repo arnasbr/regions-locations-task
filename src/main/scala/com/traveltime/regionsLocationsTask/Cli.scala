@@ -5,9 +5,9 @@ import com.monovore.decline._
 import com.traveltime.regionsLocationsTask.Models.CliArgs
 
 object Cli {
-  val locationsInputFile: Opts[String] =
+  private val locationsInputFile: Opts[String] =
     Opts.option[String]("locations", help = "Path to locations JSON file")
-  val regionsInputFile: Opts[String] =
+  private val regionsInputFile: Opts[String] =
     Opts.option[String]("regions", help = "Path to regions JSON file")
   val outputFile: Opts[String] =
     Opts.option[String]("output", help = "Path to output JSON file")
