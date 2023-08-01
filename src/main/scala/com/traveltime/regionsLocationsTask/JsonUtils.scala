@@ -8,7 +8,7 @@ import scala.util.Using
 import scala.io.Source
 import Models._
 import Codecs._
-import CustomError._
+import CustomErrors._
 
 object JsonUtils {
   def parseAndDecode[T: Decoder](

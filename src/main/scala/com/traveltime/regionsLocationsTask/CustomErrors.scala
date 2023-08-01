@@ -3,7 +3,7 @@ package com.traveltime.regionsLocationsTask
 sealed trait CustomError {
   def msg: String
 }
-object CustomError {
+object CustomErrors {
   case class FileReadError(override val msg: String) extends CustomError {
     override def toString: String = s"Failed to read file: $msg"
   }
