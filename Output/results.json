@@ -1,22 +1,26 @@
 [
   {
-    "region" : "region1",
+    "region" : "region4",
     "matched_locations" : [
-      "location1",
-      "location2"
     ]
   },
   {
-    "region" : "region2",
+    "region" : "region5",
     "matched_locations" : [
-      "location3",
-      "location4",
-      "location5"
     ]
   },
   {
-    "region" : "region3",
+    "region" : "region6",
     "matched_locations" : [
+      "location14",
+      "location15"
+    ]
+  },
+  {
+    "region" : "region7",
+    "matched_locations" : [
+      "location14",
+      "location15"
     ]
   }
 ]
