@@ -39,14 +39,16 @@
     "region" : "region6",
     "matched_locations" : [
       "location14",
-      "location15"
+      "location15",
+      "location16"
     ]
   },
   {
     "region" : "region7",
     "matched_locations" : [
       "location14",
-      "location15"
+      "location15",
+      "location16"
     ]
   }
 ]
