@@ -45,7 +45,7 @@ object Main
                 jsonString.getBytes(StandardCharsets.UTF_8)
               )
             case Left(error) =>
-              println(s"An error occurred: ${error.getMessage}")
+              println(s"An error occurred: ${error.toString}")
           }
         }
       }

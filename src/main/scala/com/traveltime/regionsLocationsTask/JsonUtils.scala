@@ -8,21 +8,26 @@ import scala.util.Using
 import scala.io.Source
 import Models._
 import Codecs._
+import CustomErrors._
 
 object JsonUtils {
   def parseAndDecode[T: Decoder](
       jsonFilePath: String
-  ): Either[Throwable, List[T]] = {
+  ): Either[CustomErrors, List[T]] = {
     for {
-      jsonString <- Using(Source.fromFile(jsonFilePath))(_.mkString).toEither
-      json <- parse(jsonString)
-      list <- json.as[List[T]]
+      jsonString <- Using(Source.fromFile(jsonFilePath))(
+        _.mkString
+      ).toEither.left.map(e => FileReadError(e.toString))
+      json <- parse(jsonString).left.map(e => ParseError(e.toString))
+      list <- json.as[List[T]].left.map(e => DecodeError(e.toString()))
     } yield list
   }
 
   def regionsToJsonString(
-      regionWithLocations: Either[Throwable, List[RegionWithLocations]]
-  ): Either[Throwable, String] = {
-    regionWithLocations.map(_.asJson.spaces2)
+      regionWithLocations: Either[CustomErrors, List[RegionWithLocations]]
+  ): Either[CustomErrors, String] = {
+    regionWithLocations.left
+      .map(e => ConversionError(e.toString))
+      .map(_.asJson.spaces2)
   }
 }
