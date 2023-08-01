@@ -1,6 +1,6 @@
 [
   {
-    "name": "region1",
+    "name": "region4",
     "coordinates": [
       [
         [
@@ -131,7 +131,7 @@
     ]
   },
   {
-    "name": "region4",
+    "name": "region1",
     "coordinates": [
       [
         [
@@ -207,7 +207,7 @@
     ]
   },
   {
-    "name": "region6",
+    "name": "region7",
     "coordinates": [
       [
         [
@@ -234,7 +234,7 @@
     ]
   },
   {
-    "name": "region7",
+    "name": "region6",
     "coordinates": [
       [
         [

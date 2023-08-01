@@ -28,7 +28,12 @@ object Main
           val regionWithLocations = for {
             regions <- regionsResult
             locations <- locationsResult
-          } yield matchLocationsWithRegions(regions, locations)
+          } yield {
+            val matched = matchLocationsWithRegions(regions, locations)
+            matched
+              .map(r => r.copy(matchedLocations = r.matchedLocations.sorted))
+              .sortBy(_.region)
+          }
 
           val jsonStringEither = regionsToJsonString(regionWithLocations)
 
