@@ -13,15 +13,16 @@ import CustomErrors._
 object JsonUtils {
   def parseAndDecode[T: Decoder](
       jsonFilePath: String
-  ): Either[CustomErrors, List[T]] = {
+  ): Either[CustomErrors, List[T]] =
     for {
-      jsonString <- Using(Source.fromFile(jsonFilePath))(
-        _.mkString
-      ).toEither.left.map(e => FileReadError(e.toString))
-      json <- parse(jsonString).left.map(e => ParseError(e.toString))
-      list <- json.as[List[T]].left.map(e => DecodeError(e.toString()))
-    } yield list
-  }
+      data <- Using(Source.fromFile(jsonFilePath))(_.mkString).toEither.left
+        .map(e => FileReadError(e.toString))
+      circeJson <- parse(data).left.map(e => ParseError(e.toString))
+      decodedList <- circeJson
+        .as[List[T]]
+        .left
+        .map(e => DecodeError(e.toString()))
+    } yield decodedList
 
   def regionsToJsonString(
       regionWithLocations: Either[CustomErrors, List[RegionWithLocations]]
