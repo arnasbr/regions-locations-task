@@ -3,10 +3,11 @@ package com.traveltime.regionsLocationsTask
 import io.circe._
 import com.traveltime.regionsLocationsTask.Models._
 import io.circe.Decoder
-import io.circe.generic.extras.{semiauto, Configuration}
+import io.circe.generic.extras.{Configuration, semiauto}
 import cats.syntax.traverse._
 import cats.instances.list._
 import cats.instances.either._
+import io.circe.generic.semiauto.deriveDecoder
 
 object Codecs {
   implicit val customConfig: Configuration =
@@ -39,4 +40,7 @@ object Codecs {
 
   implicit val encodeRegionWithLocations: Encoder[RegionWithLocations] =
     semiauto.deriveConfiguredEncoder[RegionWithLocations]
+
+  implicit val regionWithLocationsDecoder: Decoder[RegionWithLocations] =
+    deriveDecoder
 }
