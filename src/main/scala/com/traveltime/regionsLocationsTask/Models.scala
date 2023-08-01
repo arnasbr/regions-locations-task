@@ -3,6 +3,8 @@ import io.circe.generic.extras.JsonKey
 import io.circe.generic.extras.semiauto._
 import io.circe.generic.extras.{Configuration, ConfiguredJsonCodec}
 
+import scala.reflect.io.File
+
 object Models {
   case class Coordinate(x: Double, y: Double)
 
@@ -15,8 +17,8 @@ object Models {
   case class RegionWithLocations(region: String, matchedLocations: List[String])
 
   case class CliArgs(
-      locationsFile: String,
-      regionsFile: String,
-      outputFile: String
+      locationsFile: File,
+      regionsFile: File,
+      outputFile: File
   )
 }

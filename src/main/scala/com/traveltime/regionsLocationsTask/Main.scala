@@ -23,8 +23,8 @@ object Main
 
           (
             for {
-              locations <- parseAndDecode[Location](locationsFile)
-              regions <- parseAndDecode[Region](regionsFile)
+              locations <- parseAndDecode[Location](locationsFile.toString())
+              regions <- parseAndDecode[Region](regionsFile.toString())
             } yield matchLocationsWithRegions(regions, locations)
               .map(r => r.copy(matchedLocations = r.matchedLocations.sorted))
               .sortBy(_.region)
@@ -34,7 +34,7 @@ object Main
 
             case Right(regionsWithLocations) =>
               Files.write(
-                Paths.get(outputFile),
+                Paths.get(outputFile.toString()),
                 regionsWithLocations.asJson.spaces2.getBytes(
                   StandardCharsets.UTF_8
                 )
