@@ -14,7 +14,10 @@ object Models {
 
   case class Location(name: String, coordinates: Coordinate)
 
-  case class RegionWithLocations(region: String, matchedLocations: List[String])
+  case class RegionWithLocations(
+      region: String,
+      matchedLocations: List[Location]
+  )
 
   case class CliArgs(
       locationsFile: File,

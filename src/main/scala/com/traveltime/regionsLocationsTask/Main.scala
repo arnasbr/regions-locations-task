@@ -25,9 +25,15 @@ object Main
             for {
               locations <- parseAndDecode[Location](locationsFile.toString())
               regions <- parseAndDecode[Region](regionsFile.toString())
-            } yield matchLocationsWithRegions(regions, locations)
-              .map(r => r.copy(matchedLocations = r.matchedLocations.sorted))
-              .sortBy(_.region)
+            } yield {
+              val matched = matchLocationsWithRegions(regions, locations)
+              val sortedMatched = matched.map { regionWithLocations =>
+                val sortedLocations =
+                  regionWithLocations.matchedLocations.sortBy(_.name)
+                regionWithLocations.copy(matchedLocations = sortedLocations)
+              }
+              sortedMatched.sortBy(_.region)
+            }
           ) match {
             case Left(error) =>
               println(s"An error occurred: ${error.toString}")

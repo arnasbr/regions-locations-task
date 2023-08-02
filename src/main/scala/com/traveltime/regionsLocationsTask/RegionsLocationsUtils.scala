@@ -15,7 +15,7 @@ object RegionsLocationsUtils {
           )
         )
       )
-      RegionWithLocations(region.name, matchedLocations.map(_.name))
+      RegionWithLocations(region.name, matchedLocations)
     }
   }
 }
