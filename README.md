@@ -32,8 +32,8 @@ sbt "run match --locations <pathToLocationsFile> --regions <pathToRegionsFile> -
 It is also possible to run the application using docker
 
 ```bash
-sbt docker:publishLocal
-docker run -it --rm -u 1000 -v path/to/inputDir:/app/input -v path/to/outputDir:/app/output regions-locations-task:1.0 match --locations /app/input/locations.json --regions /app/input/regions.json --output /app/output/results.json
+docker pull arnasbr/regions-locations-task
+docker run -it --rm -u 1000 -v path/to/inputDir:/app/input -v path/to/outputDir:/app/output arnasbr/regions-locations-task match --locations /app/input/locations.json --regions /app/input/regions.json --output /app/output/results.json
 ```
 
 ## Input file examples

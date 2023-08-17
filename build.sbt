@@ -1,11 +1,13 @@
-enablePlugins(DockerPlugin, JavaAppPackaging)
+import com.typesafe.sbt.packager.docker.DockerPermissionStrategy
+
+enablePlugins(DockerPlugin, JavaAppPackaging, GitVersioning)
 
 scalaVersion := "2.13.8"
 val catsVersion = "2.9.0"
 
 name := "regions-locations-task"
 organization := "ch.epfl.scala"
-version := "1.0"
+version := git.gitHeadCommit.value.getOrElse("0.1").take(5)
 
 Docker / packageName := packageName.value
 Docker / version := version.value
@@ -15,6 +17,11 @@ dockerExposedVolumes := Seq("/opt/docker/logs")
 Docker / defaultLinuxInstallLocation := "/opt/docker"
 Docker / daemonUserUid := None
 Docker / daemonUser := "daemon"
+
+dockerRepository := Some("arnasbr")
+dockerUpdateLatest := true
+dockerPermissionStrategy := DockerPermissionStrategy.MultiStage
+Docker / dockerGroupLayers := PartialFunction.empty
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.2.0"
 
